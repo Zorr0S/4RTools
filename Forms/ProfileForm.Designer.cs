@@ -36,6 +36,8 @@
             this.lbProfilesList = new System.Windows.Forms.ListBox();
             this.btnEditProfile = new System.Windows.Forms.Button();
             this.btnCopy = new System.Windows.Forms.Button();
+            this.btnImportProfile = new System.Windows.Forms.Button();
+            this.btnExportProfile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtProfileName
@@ -112,12 +114,34 @@
             this.btnCopy.Text = "Copy";
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            //
+            // btnImportProfile
+            //
+            this.btnImportProfile.Location = new System.Drawing.Point(267, 164);
+            this.btnImportProfile.Name = "btnImportProfile";
+            this.btnImportProfile.Size = new System.Drawing.Size(78, 23);
+            this.btnImportProfile.TabIndex = 11;
+            this.btnImportProfile.Text = "Import...";
+            this.btnImportProfile.UseVisualStyleBackColor = true;
+            this.btnImportProfile.Click += new System.EventHandler(this.btnImportProfile_Click);
+            //
+            // btnExportProfile
+            //
+            this.btnExportProfile.Location = new System.Drawing.Point(267, 193);
+            this.btnExportProfile.Name = "btnExportProfile";
+            this.btnExportProfile.Size = new System.Drawing.Size(78, 23);
+            this.btnExportProfile.TabIndex = 12;
+            this.btnExportProfile.Text = "Export...";
+            this.btnExportProfile.UseVisualStyleBackColor = true;
+            this.btnExportProfile.Click += new System.EventHandler(this.btnExportProfile_Click);
             // 
             // ProfileForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(374, 232);
+            this.Controls.Add(this.btnExportProfile);
+            this.Controls.Add(this.btnImportProfile);
             this.Controls.Add(this.btnCopy);
             this.Controls.Add(this.btnEditProfile);
             this.Controls.Add(this.lbProfilesList);
@@ -144,5 +168,7 @@
         private System.Windows.Forms.ListBox lbProfilesList;
         private System.Windows.Forms.Button btnEditProfile;
         private System.Windows.Forms.Button btnCopy;
+        private System.Windows.Forms.Button btnImportProfile;
+        private System.Windows.Forms.Button btnExportProfile;
     }
 }

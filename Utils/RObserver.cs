@@ -15,7 +15,7 @@ namespace _4RTools.Utils
         void Notify(Message message);
     }
 
-    public enum MessageCode { 
+    public enum MessageCode {
         PROCESS_CHANGED,
         PROFILE_CHANGED,
         PROFILE_INPUT_CHANGE,
@@ -23,7 +23,9 @@ namespace _4RTools.Utils
         TURN_OFF,
         SHUTDOWN_APPLICATION,
         CLICK_ICON_TRAY,
-        SERVER_LIST_CHANGED
+        SERVER_LIST_CHANGED,
+        SKILL_MAP_CHANGED,
+        SKILL_TRIGGERS_CHANGED
     }
 
     public class Message

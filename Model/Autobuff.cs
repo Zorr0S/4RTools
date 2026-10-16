@@ -17,6 +17,13 @@ namespace _4RTools.Model
         public int delay { get; set; } = 1;
         public Dictionary<EffectStatusIDs, Key> buffMapping = new Dictionary<EffectStatusIDs, Key>();
 
+        // Runtime-only: when a status has a CooldownSeconds configured in
+        // SkillMapManager (see Forms/SkillBibleForm.cs), don't retry its key until
+        // that many seconds have passed since the last attempt - otherwise a skill
+        // whose real cooldown outlasts its buff duration gets spammed uselessly
+        // for the gap between expiry and availability.
+        private readonly Dictionary<EffectStatusIDs, DateTime> lastPressedUtc = new Dictionary<EffectStatusIDs, DateTime>();
+
         public void Start()
         {
             Stop();
@@ -65,9 +72,19 @@ namespace _4RTools.Model
                     {
                         break;
                     }
-                    else if (c.ReadCurrentHp() >= Constants.MINIMUM_HP_TO_RECOVER)
+
+                    SkillMapEntry mapEntry = SkillMapManager.Get((uint)item.Key);
+                    if (mapEntry != null && mapEntry.CooldownSeconds > 0
+                        && lastPressedUtc.TryGetValue(item.Key, out DateTime lastPressTime)
+                        && (DateTime.UtcNow - lastPressTime).TotalSeconds < mapEntry.CooldownSeconds)
+                    {
+                        continue; // still on real cooldown, don't spam the key
+                    }
+
+                    if (c.ReadCurrentHp() >= Constants.MINIMUM_HP_TO_RECOVER)
                     {
                         this.useAutobuff(item.Value);
+                        lastPressedUtc[item.Key] = DateTime.UtcNow;
                         Thread.Sleep(10);
                     }
                 }

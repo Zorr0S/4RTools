@@ -38,8 +38,30 @@ namespace _4RTools.Forms
             SetATKDEFWindow();
             SetMacroSwitchWindow();
             SetServerWindow();
+            SetStatusCaptureWindow();
+            SetSkillBibleWindow();
+            SetMouseRemapWindow();
+
+            // SkillMapManager/StatusCapture are static Model classes with no Subject
+            // reference of their own (and some of their writes happen from a Test's
+            // background watcher thread, seconds after the user clicked anything), so
+            // Container - the one place that owns the shared Subject - is the single
+            // bridge point: translate the raw Model event into a proper Notify so
+            // every observer reacts through the same Update(ISubject) path as
+            // everything else, instead of each Form subscribing to Model events itself.
+            SkillMapManager.Changed += () => NotifyFromAnyThread(MessageCode.SKILL_MAP_CHANGED);
+            StatusCapture.TriggersChanged += () => NotifyFromAnyThread(MessageCode.SKILL_TRIGGERS_CHANGED);
 
             TrackerSingleton.Instance().SendEvent("desktop_login", "page_view", "desktop_container_load");
+        }
+
+        private void NotifyFromAnyThread(MessageCode code)
+        {
+            if (this.IsDisposed) return;
+            if (this.IsHandleCreated)
+            {
+                this.BeginInvoke(new MethodInvoker(() => subject.Notify(new Utils.Message(code, null))));
+            }
         }
 
         public void addform(TabPage tp, Form f)
@@ -322,6 +344,36 @@ namespace _4RTools.Forms
             frm.Location = new Point(0, 65);
             frm.MdiParent = this;
             addform(this.tabMacroSwitch, frm);
+            frm.Show();
+        }
+
+        public void SetStatusCaptureWindow()
+        {
+            StatusCaptureForm frm = new StatusCaptureForm(subject);
+            frm.FormBorderStyle = FormBorderStyle.None;
+            frm.Location = new Point(0, 65);
+            frm.MdiParent = this;
+            addform(this.tabStatusCapture, frm);
+            frm.Show();
+        }
+
+        public void SetSkillBibleWindow()
+        {
+            SkillBibleForm frm = new SkillBibleForm(subject);
+            frm.FormBorderStyle = FormBorderStyle.None;
+            frm.Location = new Point(0, 65);
+            frm.MdiParent = this;
+            addform(this.tabSkillBible, frm);
+            frm.Show();
+        }
+
+        public void SetMouseRemapWindow()
+        {
+            MouseRemapForm frm = new MouseRemapForm(subject);
+            frm.FormBorderStyle = FormBorderStyle.None;
+            frm.Location = new Point(0, 65);
+            frm.MdiParent = this;
+            addform(this.tabMouseRemap, frm);
             frm.Show();
         }
         #endregion

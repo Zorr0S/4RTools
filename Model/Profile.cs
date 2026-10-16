@@ -34,6 +34,8 @@ namespace _4RTools.Model
                     profile.AtkDefMode = JsonConvert.DeserializeObject<ATKDEFMode>(Profile.GetByAction(rawObject, profile.AtkDefMode));
                     profile.MacroSwitch = JsonConvert.DeserializeObject<Macro>(Profile.GetByAction(rawObject, profile.MacroSwitch));
                     profile.DebuffsRecovery = JsonConvert.DeserializeObject<DebuffsRecovery>(Profile.GetByAction(rawObject, profile.DebuffsRecovery));
+                    profile.StatusCapture = JsonConvert.DeserializeObject<StatusCapture>(Profile.GetByAction(rawObject, profile.StatusCapture));
+                    profile.MouseRemap = JsonConvert.DeserializeObject<MouseRemap>(Profile.GetByAction(rawObject, profile.MouseRemap));
                 }
             }
             catch (Exception ex)
@@ -41,6 +43,22 @@ namespace _4RTools.Model
                 Console.Error.WriteLine($"[Profile] Error Message: {ex.Message}");
                 throw new Exception("Houve um problema ao carregar o perfil. Delete a pasta Profiles e tente novamente.");
             }
+        }
+
+        public static void Import(string sourceFilePath, string profileName)
+        {
+            string json = File.ReadAllText(sourceFilePath);
+            JsonConvert.DeserializeObject(json); // throws if this isn't valid JSON at all
+
+            if (!Directory.Exists(AppConfig.ProfileFolder)) { Directory.CreateDirectory(AppConfig.ProfileFolder); }
+            File.WriteAllText(AppConfig.ProfileFolder + profileName + ".json", json);
+
+            Load(profileName);
+        }
+
+        public static void Export(string profileName, string destFilePath)
+        {
+            File.Copy(AppConfig.ProfileFolder + profileName + ".json", destFilePath, true);
         }
 
         public static void Create(string profileName)
@@ -125,6 +143,8 @@ namespace _4RTools.Model
 
         public ATKDEFMode AtkDefMode { get; set; }
         public DebuffsRecovery DebuffsRecovery { get; set; }
+        public StatusCapture StatusCapture { get; set; }
+        public MouseRemap MouseRemap { get; set; }
 
         public Profile(string name)
         {
@@ -143,6 +163,8 @@ namespace _4RTools.Model
             this.MacroSwitch = new Macro(Macro.ACTION_NAME_MACRO_SWITCH, MacroSwitchForm.TOTAL_MACRO_LANES);
             this.AtkDefMode = new ATKDEFMode();
             this.DebuffsRecovery = new DebuffsRecovery();
+            this.StatusCapture = new StatusCapture();
+            this.MouseRemap = new MouseRemap();
         }
 
         public static object GetByAction(dynamic obj, Action action)

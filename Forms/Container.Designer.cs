@@ -60,6 +60,9 @@ namespace _4RTools.Forms
             this.tabSkillTimer = new System.Windows.Forms.TabPage();
             this.atkDefMode = new System.Windows.Forms.TabControl();
             this.tabDebuffRecovery = new System.Windows.Forms.TabPage();
+            this.tabStatusCapture = new System.Windows.Forms.TabPage();
+            this.tabSkillBible = new System.Windows.Forms.TabPage();
+            this.tabMouseRemap = new System.Windows.Forms.TabPage();
             this.characterName = new System.Windows.Forms.Label();
             this.lblCharacterName = new System.Windows.Forms.Label();
             this.OnOffPanel = new System.Windows.Forms.Panel();
@@ -144,6 +147,7 @@ namespace _4RTools.Forms
             // 
             // panelFooter
             // 
+            this.panelFooter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right));
             this.panelFooter.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panelFooter.Controls.Add(this.lbPowered);
             this.panelFooter.Controls.Add(this.lblLinkDiscord);
@@ -323,6 +327,12 @@ namespace _4RTools.Forms
             this.atkDefMode.Controls.Add(this.atkDef);
             this.atkDefMode.Controls.Add(this.tabPageProfiles);
             this.atkDefMode.Controls.Add(this.tabPageServer);
+            this.atkDefMode.Controls.Add(this.tabStatusCapture);
+            this.atkDefMode.Controls.Add(this.tabSkillBible);
+            this.atkDefMode.Controls.Add(this.tabMouseRemap);
+            this.atkDefMode.Anchor =((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.atkDefMode.Location = new System.Drawing.Point(15, 274);
             this.atkDefMode.Name = "atkDefMode";
             this.atkDefMode.SelectedIndex = 0;
@@ -339,7 +349,37 @@ namespace _4RTools.Forms
             this.tabDebuffRecovery.TabIndex = 2;
             this.tabDebuffRecovery.Text = "Debuff";
             this.tabDebuffRecovery.UseVisualStyleBackColor = true;
-            // 
+            //
+            // tabStatusCapture
+            //
+            this.tabStatusCapture.Location = new System.Drawing.Point(4, 22);
+            this.tabStatusCapture.Name = "tabStatusCapture";
+            this.tabStatusCapture.Padding = new System.Windows.Forms.Padding(3);
+            this.tabStatusCapture.Size = new System.Drawing.Size(865, 274);
+            this.tabStatusCapture.TabIndex = 10;
+            this.tabStatusCapture.Text = "Skill Capture";
+            this.tabStatusCapture.UseVisualStyleBackColor = true;
+            //
+            // tabSkillBible
+            //
+            this.tabSkillBible.Location = new System.Drawing.Point(4, 22);
+            this.tabSkillBible.Name = "tabSkillBible";
+            this.tabSkillBible.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSkillBible.Size = new System.Drawing.Size(865, 274);
+            this.tabSkillBible.TabIndex = 11;
+            this.tabSkillBible.Text = "Skill Bible";
+            this.tabSkillBible.UseVisualStyleBackColor = true;
+            //
+            // tabMouseRemap
+            //
+            this.tabMouseRemap.Location = new System.Drawing.Point(4, 22);
+            this.tabMouseRemap.Name = "tabMouseRemap";
+            this.tabMouseRemap.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMouseRemap.Size = new System.Drawing.Size(865, 274);
+            this.tabMouseRemap.TabIndex = 12;
+            this.tabMouseRemap.Text = "Mouse Remap";
+            this.tabMouseRemap.UseVisualStyleBackColor = true;
+            //
             // characterName
             // 
             this.characterName.AutoSize = true;
@@ -374,6 +414,7 @@ namespace _4RTools.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(609, 624);
+            this.MinimumSize = new System.Drawing.Size(625, 663);
             this.Controls.Add(this.OnOffPanel);
             this.Controls.Add(this.characterName);
             this.Controls.Add(this.lblCharacterName);
@@ -388,9 +429,9 @@ namespace _4RTools.Forms
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.lblProcessName);
             this.Controls.Add(this.processCB);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
+            this.MaximizeBox = true;
             this.Name = "Container";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "4ROTools - Versão Beta";
@@ -435,6 +476,9 @@ namespace _4RTools.Forms
         private Label characterName;
         private Label lblCharacterName;
         private TabPage tabDebuffRecovery;
+        private TabPage tabStatusCapture;
+        private TabPage tabSkillBible;
+        private TabPage tabMouseRemap;
         private Panel OnOffPanel;
         private TabPage tabSkillTimer;
         private Label lbPowered;
