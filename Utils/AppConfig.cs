@@ -5,7 +5,7 @@ namespace _4RTools.Utils
 {
     internal class AppConfig
     {
-        public static string Name = "4RTools";
+        public static string Name = "4RTools PRM";
         public static string ProfileFolder = "Profile\\";
         public static string Website = "https://www.4rtools.com.br";
         public static string GithubLink = "https://github.com/4RTools/4Rtools";

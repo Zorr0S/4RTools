@@ -2,8 +2,8 @@
   <img src="/assets/images/combo-tools.png">
 </p>
 
-# 4RTools
-This is an all-in-one tool for **Ragnarök Online** servers. You will be able to Autopot, Spam Skill, Use Macro Songs and much more. Hope you enjoy it and collaborate with us. If you have found a bug or want to request a feature, feel free to open an issue!
+# 4RTools PRM
+A [4RTools](https://github.com/4RTools/4RTools) fork customized for **Return to Morroc (PRM)**, a Ragnarök Online private server - adds server-specific skill/status mapping (Skill Capture, Skill Bible) on top of everything the original all-in-one tool already does: Autopot, Spam Skill, Macro Songs and more. Hope you enjoy it and collaborate with us. If you have found a bug or want to request a feature, feel free to open an issue!
 
 **THIS IS A FREE TOOL, YOU CAN MAKE EVERYTHING YOU WANT UNDER MIT LICENSE. WE ARE OPEN FOR IDEAS AND COLLABORATIONS**
 
@@ -31,6 +31,9 @@ This project was created using Visual Studio 2022, just open `4RTools.sln` in Vi
 - [x] Song Macro
 - [x] Macro Switch/Macro Chain
 - [x] ATK x DEF Mode switch
+- [x] Skill Capture - passively discovers a private server's custom status IDs and maps them to skills (see `docs/specs/skill-capture.md`)
+- [x] Skill Bible - browsable, class-ordered skill catalog with built-in testing and Autobuff wiring (see `docs/specs/skill-bible.md`)
+- [x] Mouse Remap - bind the mouse side buttons to keyboard keys (see `docs/specs/mouse-remap.md`)
 
 #### References
 https://github.com/k1ngJ/dtAP
