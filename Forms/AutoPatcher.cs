@@ -6,7 +6,6 @@ using _4RTools.Utils;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Http;
-using Aspose.Zip.Rar;
 using System.Net;
 
 namespace _4RTools.Forms
@@ -19,15 +18,17 @@ namespace _4RTools.Forms
             InitializeComponent();
             /**
              * Autopatch Process
-             * 1. Fetch the latest tag in url
+             * 1. Fetch the latest tag from AppConfig._4RLatestVersionURL
              * 2. Compare with current version code in AppConfig.cs
-             * 3. If different, should download the .rar in github
-             * 3.1  Rename current 4RTools.exe to 4RTools_old.exe
-             * 3.2  Rename 4RTools to 4RTools_old
-             * 3.3  Extract .rar file in folder
-             * 3.3  Delete .rar in file folder.
-             * 3.4  Delete 4RTools_old in file folder.
-             * 4. If equals, version are updated.
+             * 3. If different, download the release's .zip asset
+             * 3.1  Extract it to a staging folder and verify 4RTools.exe is present
+             *      and not suspiciously smaller than the currently-running exe
+             * 3.2  Rename the current 4RTools.exe to 4RTools_old.exe
+             * 3.3  Copy the staged files over the install, delete the staging
+             *      folder and the downloaded zip
+             * 3.4  Relaunch
+             * 4. If equal, or if anything above fails, just continue running
+             *    the current version.
              */
             StartAutopatcher();
         }
@@ -78,22 +79,36 @@ namespace _4RTools.Forms
                     if (Directory.Exists(stagingDir)) Directory.Delete(stagingDir, true);
                     Directory.CreateDirectory(stagingDir);
 
-                    if (fileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                    if (!fileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                     {
-                        System.IO.Compression.ZipFile.ExtractToDirectory(fileName, stagingDir);
+                        // Every release this fork publishes is a .zip. RAR support was
+                        // dropped entirely: it depended on Aspose.Zip, which was never
+                        // licensed in this project, and its unlicensed evaluation mode
+                        // silently truncates extracted output (confirmed: a real 4.15MB
+                        // exe came out as exactly 524,288 bytes - no error, no warning,
+                        // just a corrupted exe overwriting the working one). There's no
+                        // safe way to support an archive format whose extraction can
+                        // silently lie about having succeeded.
+                        throw new Exception($"Downloaded update ({fileName}) is not a .zip - refusing to apply it.");
                     }
-                    else
-                    {
-                        using (RarArchive arch = new RarArchive(fileName))
-                        {
-                            arch.ExtractToDirectory(stagingDir);
-                        }
-                    }
+
+                    System.IO.Compression.ZipFile.ExtractToDirectory(fileName, stagingDir);
 
                     string extractedExePath = Path.Combine(stagingDir, "4RTools.exe");
                     if (!File.Exists(extractedExePath))
                     {
                         throw new Exception($"Downloaded update ({fileName}) did not contain 4RTools.exe - aborting update.");
+                    }
+
+                    // Sanity-check the size against the exe currently running - catches
+                    // any other silent-truncation scenario (a bad download, a different
+                    // mis-licensed library down the line, ...) before it can overwrite a
+                    // working install with a corrupted one.
+                    long extractedSize = new FileInfo(extractedExePath).Length;
+                    long currentSize = File.Exists(sourceFileName) ? new FileInfo(sourceFileName).Length : 0;
+                    if (currentSize > 0 && extractedSize < currentSize / 2)
+                    {
+                        throw new Exception($"Downloaded 4RTools.exe is suspiciously small ({extractedSize} bytes vs current {currentSize} bytes) - aborting update.");
                     }
 
                     File.Move(sourceFileName, oldFileName);
