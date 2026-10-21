@@ -22,7 +22,7 @@ namespace _4RTools.Forms
         private TextBox txtMapSkillId;
         private TextBox txtMapSkillName;
         private TextBox txtMapNote;
-        private GroupBox grpMap;
+        private TabPage tabMap;
 
         private DataGridView capturedGrid;
         private CheckBox chkActiveOnly;
@@ -32,7 +32,7 @@ namespace _4RTools.Forms
         private TextBox txtTriggerSkillId;
         private TextBox txtTriggerSkillName;
         private TextBox txtTriggerKey;
-        private GroupBox grpTriggers;
+        private TabPage tabTriggers;
 
         private ToolTip toolTip;
         private Timer refreshTimer;
@@ -65,21 +65,17 @@ namespace _4RTools.Forms
             this.Text = "Skill Capture";
             toolTip = new ToolTip();
 
-            // Three clearly-bordered, titled sections stacked and sharing the
-            // window's height proportionally (TableLayoutPanel + Percent rows) so
-            // resizing the (now-resizable) Container window actually grows each
-            // grid instead of leaving the old fixed-height panels either cramped
-            // or surrounded by dead space. Map gets the largest share since it's
-            // where a link is actually created/edited; see docs/specs/skill-capture.md.
-            TableLayoutPanel root = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(4) };
-            root.RowStyles.Add(new RowStyle(SizeType.Percent, 28f));
-            root.RowStyles.Add(new RowStyle(SizeType.Percent, 40f));
-            root.RowStyles.Add(new RowStyle(SizeType.Percent, 32f));
-            root.Controls.Add(BuildTriggersGroup(), 0, 0);
-            root.Controls.Add(BuildMapGroup(), 0, 1);
-            root.Controls.Add(BuildCapturedGroup(), 0, 2);
+            // Map / Triggers / Captured each get their own sub-tab instead of being
+            // stacked on one screen - with 70+ map entries, three sections fighting
+            // over a fixed share of the window got cramped fast. Map opens by
+            // default since it's where a link is actually created/edited; see
+            // docs/specs/skill-capture.md.
+            TabControl tabs = new TabControl { Dock = DockStyle.Fill };
+            tabs.TabPages.Add(BuildMapTab());
+            tabs.TabPages.Add(BuildTriggersTab());
+            tabs.TabPages.Add(BuildCapturedTab());
 
-            this.Controls.Add(root);
+            this.Controls.Add(tabs);
         }
 
         // Pressing Enter in a plain text field submits the section's primary
@@ -96,9 +92,9 @@ namespace _4RTools.Forms
         }
 
         // ---- Skill Triggers (auto-map on keypress) ----------------------------
-        private GroupBox BuildTriggersGroup()
+        private TabPage BuildTriggersTab()
         {
-            grpTriggers = new GroupBox { Text = "Skill Triggers - auto-map a hotkey to a skill", Dock = DockStyle.Fill, Margin = new Padding(3) };
+            tabTriggers = new TabPage("Skill Triggers");
 
             Panel entryPanel = new Panel { Dock = DockStyle.Top, Height = 42 };
 
@@ -151,21 +147,21 @@ namespace _4RTools.Forms
             triggersGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "Key", HeaderText = "Key", Width = 100 });
             triggersGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "StatusId", HeaderText = "Mapped Status", ReadOnly = true, Width = 110 });
             triggersGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "LastFired", HeaderText = "Last Fired", ReadOnly = true, Width = 90 });
-            triggersGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "LastResult", HeaderText = "Result", ReadOnly = true, Width = 320 });
+            triggersGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "LastResult", HeaderText = "Result", ReadOnly = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             triggersGrid.CellClick += TriggersGrid_CellClick;
             toolTip.SetToolTip(triggersGrid, "Click a row to edit it above. 'Test Selected' sends the key itself - the most reliable way to trigger a mapping.");
 
             // Dock=Top controls stack in reverse add order (last added ends up
             // highest), so the Fill grid is added first, then the Top entry row.
-            grpTriggers.Controls.Add(triggersGrid);
-            grpTriggers.Controls.Add(entryPanel);
-            return grpTriggers;
+            tabTriggers.Controls.Add(triggersGrid);
+            tabTriggers.Controls.Add(entryPanel);
+            return tabTriggers;
         }
 
         // ---- Skill Map (the actual StatusId -> Skill link) --------------------
-        private GroupBox BuildMapGroup()
+        private TabPage BuildMapTab()
         {
-            grpMap = new GroupBox { Text = "Skill Map - the actual link Autobuff uses", Dock = DockStyle.Fill, Margin = new Padding(3) };
+            tabMap = new TabPage("Skill Map");
 
             Panel toolbarPanel = new Panel { Dock = DockStyle.Top, Height = 30 };
 
@@ -225,21 +221,21 @@ namespace _4RTools.Forms
             mapGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "StatusId", HeaderText = "Status ID", Width = 80 });
             mapGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "SkillId", HeaderText = "Skill ID", Width = 70 });
             mapGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "SkillName", HeaderText = "Skill Name", Width = 200 });
-            mapGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "Note", HeaderText = "Note", Width = 250 });
+            mapGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "Note", HeaderText = "Note", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             mapGrid.CellClick += MapGrid_CellClick;
             toolTip.SetToolTip(mapGrid, "Click a row to edit it above.");
 
             // Add order (bottom-to-top visually): Fill grid, then entry row, then toolbar last.
-            grpMap.Controls.Add(mapGrid);
-            grpMap.Controls.Add(entryPanel);
-            grpMap.Controls.Add(toolbarPanel);
-            return grpMap;
+            tabMap.Controls.Add(mapGrid);
+            tabMap.Controls.Add(entryPanel);
+            tabMap.Controls.Add(toolbarPanel);
+            return tabMap;
         }
 
         // ---- Captured / Active log (read-only reference) -----------------------
-        private GroupBox BuildCapturedGroup()
+        private TabPage BuildCapturedTab()
         {
-            GroupBox grpCaptured = new GroupBox { Text = "Captured / Active Statuses - reference only", Dock = DockStyle.Fill, Margin = new Padding(3) };
+            TabPage tabCaptured = new TabPage("Captured / Active");
 
             Panel toolbarPanel = new Panel { Dock = DockStyle.Top, Height = 30 };
 
@@ -269,13 +265,13 @@ namespace _4RTools.Forms
             capturedGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "StatusId", HeaderText = "Status ID", Width = 80 });
             capturedGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "FirstSeen", HeaderText = "First Seen", Width = 140 });
             capturedGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "LastSeen", HeaderText = "Last Seen", Width = 140 });
-            capturedGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "TimesSeen", HeaderText = "Times Seen", Width = 80 });
+            capturedGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "TimesSeen", HeaderText = "Times Seen", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             capturedGrid.CellDoubleClick += CapturedGrid_CellDoubleClick;
             toolTip.SetToolTip(capturedGrid, "Double-click a row to copy its Status ID into the Skill Map section above.");
 
-            grpCaptured.Controls.Add(capturedGrid);
-            grpCaptured.Controls.Add(toolbarPanel);
-            return grpCaptured;
+            tabCaptured.Controls.Add(capturedGrid);
+            tabCaptured.Controls.Add(toolbarPanel);
+            return tabCaptured;
         }
 
         private void BrowseInto(TextBox skillIdBox, TextBox skillNameBox)
@@ -313,9 +309,9 @@ namespace _4RTools.Forms
                     triggersGrid.Rows[rowIndex].Tag = trigger;
                 }
 
-                if (grpTriggers != null)
+                if (tabTriggers != null)
                 {
-                    grpTriggers.Text = $"Skill Triggers - auto-map a hotkey to a skill ({triggers.Count} configured)";
+                    tabTriggers.Text = $"Skill Triggers ({triggers.Count})";
                 }
             });
         }
@@ -472,9 +468,9 @@ namespace _4RTools.Forms
                     mapGrid.Rows[rowIndex].Tag = entry.StatusId;
                 }
 
-                if (grpMap != null)
+                if (tabMap != null)
                 {
-                    grpMap.Text = $"Skill Map - the actual link Autobuff uses ({entries.Count} linked)";
+                    tabMap.Text = $"Skill Map ({entries.Count})";
                 }
             });
         }

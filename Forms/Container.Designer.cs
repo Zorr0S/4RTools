@@ -327,9 +327,9 @@ namespace _4RTools.Forms
             this.atkDefMode.Controls.Add(this.atkDef);
             this.atkDefMode.Controls.Add(this.tabPageProfiles);
             this.atkDefMode.Controls.Add(this.tabPageServer);
-            this.atkDefMode.Controls.Add(this.tabStatusCapture);
             this.atkDefMode.Controls.Add(this.tabSkillBible);
             this.atkDefMode.Controls.Add(this.tabMouseRemap);
+            this.atkDefMode.Controls.Add(this.tabStatusCapture);
             this.atkDefMode.Anchor =((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -434,8 +434,9 @@ namespace _4RTools.Forms
             this.MaximizeBox = true;
             this.Name = "Container";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "4ROTools - Versão Beta";
+            this.Text = "4RTools PRM";
             this.TransparencyKey = System.Drawing.Color.Red;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Container_Load);
             this.Resize += new System.EventHandler(this.containerResize);
             this.panelFooter.ResumeLayout(false);
