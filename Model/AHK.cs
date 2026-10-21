@@ -55,12 +55,12 @@ namespace _4RTools.Model
                     _4RThread.Stop(this.thread);
                 }
 
-                this.thread = new _4RThread(_ => AHKThreadExecution(roClient));
+                this.thread = new _4RThread(self => AHKThreadExecution(roClient, self));
                 _4RThread.Start(this.thread);
             }
         }
 
-        private int AHKThreadExecution(Client roClient)
+        private int AHKThreadExecution(Client roClient, _4RThread runningThread)
         {
             if (ahkMode.Equals(COMPATIBILITY))
             {
@@ -72,13 +72,13 @@ namespace _4RTools.Model
                         if (config.ClickActive && Keyboard.IsKeyDown(config.key))
                         {
                             if (noShift) keybd_event(Constants.VK_SHIFT, 0x45, Constants.KEYEVENTF_EXTENDEDKEY, 0);
-                            _AHKCompatibility(roClient, config, thisk);
+                            _AHKCompatibility(roClient, config, thisk, runningThread);
                             if (noShift) keybd_event(Constants.VK_SHIFT, 0x45, Constants.KEYEVENTF_EXTENDEDKEY | Constants.KEYEVENTF_KEYUP, 0);
 
                         }
                         else
                         {
-                            this._AHKNoClick(roClient, config, thisk);
+                            this._AHKNoClick(roClient, config, thisk, runningThread);
                         }
                     }
                 }
@@ -88,14 +88,14 @@ namespace _4RTools.Model
                 foreach (KeyConfig config in AhkEntries.Values)
                 {
                     Keys thisk = (Keys)Enum.Parse(typeof(Keys), config.key.ToString());
-                    this._AHKSpeedBoost(roClient, config, thisk);
+                    this._AHKSpeedBoost(roClient, config, thisk, runningThread);
                 }
             }
 
             return 0;
         }
 
-        private void _AHKCompatibility(Client roClient, KeyConfig config, Keys thisk)
+        private void _AHKCompatibility(Client roClient, KeyConfig config, Keys thisk, _4RThread runningThread)
         {
             Func<int, int> send_click;
 
@@ -109,7 +109,7 @@ namespace _4RTools.Model
 
             if (this.mouseFlick)
             {
-                while (Keyboard.IsKeyDown(config.key))
+                while (runningThread.Running && Keyboard.IsKeyDown(config.key))
                 {
                     Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
                     System.Windows.Forms.Cursor.Position = new Point(System.Windows.Forms.Cursor.Position.X - Constants.MOUSE_DIAGONAL_MOVIMENTATION_PIXELS_AHK, System.Windows.Forms.Cursor.Position.Y - Constants.MOUSE_DIAGONAL_MOVIMENTATION_PIXELS_AHK);
@@ -120,7 +120,7 @@ namespace _4RTools.Model
             }
             else
             {
-                while (Keyboard.IsKeyDown(config.key))
+                while (runningThread.Running && Keyboard.IsKeyDown(config.key))
                 {
                     Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
                     send_click(0);
@@ -129,9 +129,9 @@ namespace _4RTools.Model
             }
         }
 
-        private void _AHKSpeedBoost(Client roClient, KeyConfig config, Keys thisk)
+        private void _AHKSpeedBoost(Client roClient, KeyConfig config, Keys thisk, _4RThread runningThread)
         {
-            while (Keyboard.IsKeyDown(config.key))
+            while (runningThread.Running && Keyboard.IsKeyDown(config.key))
             {
                 Point cursorPos = System.Windows.Forms.Cursor.Position;
                 Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
@@ -142,9 +142,9 @@ namespace _4RTools.Model
             }
         }
 
-        private void _AHKNoClick(Client roClient, KeyConfig config, Keys thisk)
+        private void _AHKNoClick(Client roClient, KeyConfig config, Keys thisk, _4RThread runningThread)
         {
-            while (Keyboard.IsKeyDown(config.key))
+            while (runningThread.Running && Keyboard.IsKeyDown(config.key))
             {
                 Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
                 Thread.Sleep(this.AhkDelay);

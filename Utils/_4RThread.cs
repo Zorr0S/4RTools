@@ -8,19 +8,25 @@ namespace _4RTools.Utils
 {
     public class _4RThread
     {
-        private Thread thread;
+        private readonly Thread thread;
 
+        // Replaces deprecated Thread.Suspend(); Stop() just flips this off.
+        private volatile bool running = true;
+        public bool Running => running;
 
-        public _4RThread(Func<int, int> toRun)
+        // Passes itself to toRun so a feature's own inner loop (e.g. AHK/ATKDEFMode
+        // spamming while a key is held) can check Running without going through a
+        // mutable field that might get reassigned by a later Start().
+        public _4RThread(Func<_4RThread, int> toRun)
         {
             this.thread = new Thread(() =>
             {
-                while (true)
+                while (running)
                 {
                     try
                     {
-                        toRun(0);
-                    }catch(Exception ex) { 
+                        toRun(this);
+                    }catch(Exception ex) {
                         Console.WriteLine("[4RThread Exception] Error while Executing Thread Method ==== "+ex.Message);
                     }
                     finally
@@ -39,15 +45,9 @@ namespace _4RTools.Utils
 
         public static void Stop(_4RThread _4RThread)
         {
-            if (_4RThread != null && _4RThread.thread.IsAlive)
+            if (_4RThread != null)
             {
-                try { 
-                
-                    _4RThread.thread.Suspend();
-                }
-                catch (Exception ex) {
-                    Console.WriteLine("[4R Thread Exception] =========== We could not suspend curren thread: " + ex);
-                }
+                _4RThread.running = false;
             }
         }
     }

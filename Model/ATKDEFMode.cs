@@ -40,12 +40,12 @@ namespace _4RTools.Model
             Client roClient = ClientSingleton.GetClient();
             if (roClient != null)
             {
-                this.thread = new _4RThread(_ => AHKThreadExecution(roClient));
+                this.thread = new _4RThread(self => AHKThreadExecution(roClient, self));
                 _4RThread.Start(this.thread);
             }
         }
 
-        private int AHKThreadExecution(Client roClient)
+        private int AHKThreadExecution(Client roClient, _4RThread runningThread)
         {
             Keys thisk = toKeys(keySpammer);
             if (this.keySpammer != Key.None && Keyboard.IsKeyDown(this.keySpammer))
@@ -58,7 +58,7 @@ namespace _4RTools.Model
 
                 if (this.keySpammerWithClick)
                 {
-                    while (Keyboard.IsKeyDown(keySpammer))
+                    while (runningThread.Running && Keyboard.IsKeyDown(keySpammer))
                     {
 
                         Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
@@ -70,7 +70,7 @@ namespace _4RTools.Model
                 }
                 else
                 {
-                    while (Keyboard.IsKeyDown(keySpammer))
+                    while (runningThread.Running && Keyboard.IsKeyDown(keySpammer))
                     {
                         Interop.PostMessage(roClient.process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, thisk, 0);
                         Thread.Sleep(this.ahkDelay);

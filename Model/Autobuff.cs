@@ -24,6 +24,32 @@ namespace _4RTools.Model
         // for the gap between expiry and availability.
         private readonly Dictionary<EffectStatusIDs, DateTime> lastPressedUtc = new Dictionary<EffectStatusIDs, DateTime>();
 
+        // Used only when DurationSeconds is also configured (see SkillMapEntry).
+        // lastPressedUtc + CooldownSeconds assumes the buff ran its full natural
+        // duration before expiring, which is wrong if it got cleared early (e.g.
+        // death) - that leaves AutoBuff waiting out a stale timer. Instead, once the
+        // known-unavailable gap (Cooldown - Duration) has passed, probe on a
+        // shrinking schedule (halving each miss, floor 3s) so an early loss gets
+        // caught quickly instead of waiting for the original window to run out.
+        private const double MinRetryIntervalSeconds = 3;
+        private class RetryState
+        {
+            public DateTime NextRetryUtc;
+            public double NextIntervalSeconds;
+        }
+        private readonly Dictionary<EffectStatusIDs, RetryState> retryState = new Dictionary<EffectStatusIDs, RetryState>();
+
+        // Debug-only, throttled to 1 line/status/second so the Output window stays
+        // readable - temporary instrumentation for diagnosing why a specific status
+        // isn't getting recast (see docs/specs/skill-capture.md for CooldownSeconds).
+        private readonly Dictionary<EffectStatusIDs, DateTime> lastLoggedUtc = new Dictionary<EffectStatusIDs, DateTime>();
+        private void LogDebug(EffectStatusIDs status, string message)
+        {
+            if (lastLoggedUtc.TryGetValue(status, out DateTime last) && (DateTime.UtcNow - last).TotalSeconds < 1) return;
+            lastLoggedUtc[status] = DateTime.UtcNow;
+            Console.WriteLine($"[AutoBuff Debug] {status}: {message}");
+        }
+
         public void Start()
         {
             Stop();
@@ -60,7 +86,9 @@ namespace _4RTools.Model
 
                     if (buffMapping.ContainsKey(status)) //CHECK IF STATUS EXISTS IN STATUS LIST AND DO ACTION
                     {
+                        LogDebug(status, "currently active, not pressing");
                         bmClone.Remove(status);
+                        retryState.Remove(status); // back up, restart backoff fresh next time it's missing
                     }
 
                     if (status == EffectStatusIDs.QUAGMIRE) foundQuag = true;
@@ -70,22 +98,55 @@ namespace _4RTools.Model
                 {
                     if (foundQuag && (item.Key == EffectStatusIDs.CONCENTRATION || item.Key == EffectStatusIDs.INC_AGI || item.Key == EffectStatusIDs.TRUESIGHT || item.Key == EffectStatusIDs.ADRENALINE || item.Key == EffectStatusIDs.SPEARQUICKEN))
                     {
-                        break;
+                        LogDebug(item.Key, "missing but skipped, Quagmire is active");
+                        continue; // Quagmire suppresses just these buffs, not the rest of the batch
                     }
 
                     SkillMapEntry mapEntry = SkillMapManager.Get((uint)item.Key);
-                    if (mapEntry != null && mapEntry.CooldownSeconds > 0
-                        && lastPressedUtc.TryGetValue(item.Key, out DateTime lastPressTime)
+                    bool hasUnavailableWindow = mapEntry != null && mapEntry.CooldownSeconds > 0
+                        && mapEntry.DurationSeconds > 0 && mapEntry.DurationSeconds < mapEntry.CooldownSeconds;
+                    bool everPressed = lastPressedUtc.TryGetValue(item.Key, out DateTime lastPressTime);
+
+                    if (everPressed && hasUnavailableWindow)
+                    {
+                        double unavailableSeconds = mapEntry.CooldownSeconds - mapEntry.DurationSeconds;
+                        if (!retryState.TryGetValue(item.Key, out RetryState retry))
+                        {
+                            retry = new RetryState { NextRetryUtc = lastPressTime.AddSeconds(unavailableSeconds), NextIntervalSeconds = unavailableSeconds };
+                            retryState[item.Key] = retry;
+                        }
+
+                        if (DateTime.UtcNow < retry.NextRetryUtc)
+                        {
+                            LogDebug(item.Key, $"missing, next retry in {(retry.NextRetryUtc - DateTime.UtcNow).TotalSeconds:F0}s (backoff {retry.NextIntervalSeconds:F0}s)");
+                            continue;
+                        }
+                    }
+                    else if (everPressed && mapEntry != null && mapEntry.CooldownSeconds > 0
                         && (DateTime.UtcNow - lastPressTime).TotalSeconds < mapEntry.CooldownSeconds)
                     {
+                        double remaining = mapEntry.CooldownSeconds - (DateTime.UtcNow - lastPressTime).TotalSeconds;
+                        LogDebug(item.Key, $"missing but on configured cooldown, {remaining:F0}s left of {mapEntry.CooldownSeconds}s");
                         continue; // still on real cooldown, don't spam the key
                     }
 
                     if (c.ReadCurrentHp() >= Constants.MINIMUM_HP_TO_RECOVER)
                     {
+                        LogDebug(item.Key, $"missing, pressing {item.Value}");
                         this.useAutobuff(item.Value);
                         lastPressedUtc[item.Key] = DateTime.UtcNow;
+
+                        if (hasUnavailableWindow && retryState.TryGetValue(item.Key, out RetryState retryToAdvance))
+                        {
+                            retryToAdvance.NextIntervalSeconds = Math.Max(MinRetryIntervalSeconds, retryToAdvance.NextIntervalSeconds / 2);
+                            retryToAdvance.NextRetryUtc = DateTime.UtcNow.AddSeconds(retryToAdvance.NextIntervalSeconds);
+                        }
+
                         Thread.Sleep(10);
+                    }
+                    else
+                    {
+                        LogDebug(item.Key, "missing but HP below recovery threshold, skipping press");
                     }
                 }
 
@@ -131,7 +192,11 @@ namespace _4RTools.Model
 
         private void useAutobuff(Key key)
         {
-            if((key != Key.None) && !Keyboard.IsKeyDown(Key.LeftAlt) && !Keyboard.IsKeyDown(Key.RightAlt))
+            // AutoBuffThread runs on a plain background thread with no message pump,
+            // so System.Windows.Input.Keyboard.IsKeyDown (which reads the calling
+            // thread's own message queue) can get stuck reporting Alt as held when it
+            // isn't - same bug already found/fixed for Skill Capture and Mouse Remap.
+            if ((key != Key.None) && !Interop.IsKeyPhysicallyDown(Keys.LMenu) && !Interop.IsKeyPhysicallyDown(Keys.RMenu))
                 Interop.PostMessage(ClientSingleton.GetClient().process.MainWindowHandle, Constants.WM_KEYDOWN_MSG_ID, (Keys)Enum.Parse(typeof(Keys), key.ToString()), 0);
         }
     }
