@@ -40,8 +40,17 @@ namespace _4RTools.Forms
             //List[1] = Url
             try
             {
-                String oldFileName = "4RTools_old.exe";
-                String sourceFileName = "4RTools.exe";
+                // All paths here are anchored to the exe's own folder, not the process's
+                // current working directory - those are NOT the same thing whenever this
+                // is launched from a shortcut/debugger/terminal with a different working
+                // directory (e.g. Visual Studio's F5 default working directory is the
+                // *project* folder, not bin\Debug). Bare relative names like "4RTools.exe"
+                // previously resolved wherever the process happened to be started from,
+                // which could silently try to patch a copy of the exe that doesn't exist
+                // there at all.
+                string appDir = AppDomain.CurrentDomain.BaseDirectory;
+                string oldFileName = Path.Combine(appDir, "4RTools_old.exe");
+                string sourceFileName = Path.Combine(appDir, "4RTools.exe");
                 File.Delete(oldFileName); //Delete old 4RTools
                 //Fetch Github latest Tag
                 client.Timeout = TimeSpan.FromSeconds(5);
@@ -54,23 +63,74 @@ namespace _4RTools.Forms
                 if (tag != AppConfig.Version)
                 {
                     string downloadUrl = obj["assets"][0]["browser_download_url"].ToString(); //Latest download url
-                    string fileName = obj["assets"][0]["name"].ToString(); //Latest file name
+                    string fileName = Path.Combine(appDir, obj["assets"][0]["name"].ToString()); //Latest file name
                     //If different, 4R is outdated.
                     //Need to download and update
-                    await Download(downloadUrl, fileName); //Download the .rar file
-                    RarArchive arch = new RarArchive(fileName);
+                    await Download(downloadUrl, fileName); //Download the update archive
+
+                    // Extract into a staging folder and verify the new exe is actually
+                    // there BEFORE touching the live exe. The previous version renamed
+                    // sourceFileName away first and extracted straight into "." - if the
+                    // archive was ever the wrong format or missing the exe, that left the
+                    // install with no working 4RTools.exe and no way to recover short of
+                    // a fresh download.
+                    string stagingDir = Path.Combine(appDir, "4RTools_update_staging");
+                    if (Directory.Exists(stagingDir)) Directory.Delete(stagingDir, true);
+                    Directory.CreateDirectory(stagingDir);
+
+                    if (fileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                    {
+                        System.IO.Compression.ZipFile.ExtractToDirectory(fileName, stagingDir);
+                    }
+                    else
+                    {
+                        using (RarArchive arch = new RarArchive(fileName))
+                        {
+                            arch.ExtractToDirectory(stagingDir);
+                        }
+                    }
+
+                    string extractedExePath = Path.Combine(stagingDir, "4RTools.exe");
+                    if (!File.Exists(extractedExePath))
+                    {
+                        throw new Exception($"Downloaded update ({fileName}) did not contain 4RTools.exe - aborting update.");
+                    }
+
                     File.Move(sourceFileName, oldFileName);
-                    arch.ExtractToDirectory(".");
-                    arch.Dispose();
-                    File.Delete(fileName); //Delete .rar file downloaded
+                    CopyDirectoryContents(stagingDir, appDir);
+
+                    Directory.Delete(stagingDir, true);
+                    File.Delete(fileName); //Delete the downloaded archive
                     Environment.Exit(0);
                 }
 
+            }
+            catch (Exception ex)
+            {
+                // A failed update (bad/incompatible archive, network hiccup, ...) should
+                // never leave the app unusable - log it and keep running the current
+                // version instead of crashing or leaving the exe half-swapped.
+                Console.Error.WriteLine($"[AutoPatcher] Update check/apply failed, continuing with current version: {ex.Message}");
             }
             finally
             {
                 new ClientUpdaterForm().Show();
                 Hide();
+            }
+        }
+
+        private static void CopyDirectoryContents(string sourceDir, string destDir)
+        {
+            foreach (string filePath in Directory.GetFiles(sourceDir))
+            {
+                File.Copy(filePath, Path.Combine(destDir, Path.GetFileName(filePath)), true);
+            }
+
+            foreach (string dirPath in Directory.GetDirectories(sourceDir))
+            {
+                string destSubDir = Path.Combine(destDir, Path.GetFileName(dirPath));
+                Directory.CreateDirectory(destSubDir);
+                CopyDirectoryContents(dirPath, destSubDir);
             }
         }
 
