@@ -129,6 +129,7 @@ namespace _4RTools.Forms
             grid.Columns.Add(new DataGridViewTextBoxColumn { Name = "AimedAt", HeaderText = "Aimed At", ReadOnly = true, Width = 100 });
             grid.Columns.Add(new DataGridViewTextBoxColumn { Name = "Key", HeaderText = "Key", ReadOnly = true, Width = 70 });
             grid.Columns.Add(new DataGridViewTextBoxColumn { Name = "Cooldown", HeaderText = "Cooldown (s)", ReadOnly = false, Width = 90 });
+            grid.Columns.Add(new DataGridViewTextBoxColumn { Name = "Duration", HeaderText = "Buff Duration (s)", ReadOnly = false, Width = 110 });
             grid.Columns.Add(new DataGridViewTextBoxColumn { Name = "BuffId", HeaderText = "Buff ID", ReadOnly = true, Width = 70 });
             grid.Columns.Add(new DataGridViewButtonColumn { Name = "Test", HeaderText = "", Text = "Test", UseColumnTextForButtonValue = true, Width = 60 });
 
@@ -227,6 +228,7 @@ namespace _4RTools.Forms
                     skill.AimedAt,
                     trigger?.Key ?? "",
                     mapEntry != null && mapEntry.CooldownSeconds > 0 ? mapEntry.CooldownSeconds.ToString() : "",
+                    mapEntry != null && mapEntry.DurationSeconds > 0 ? mapEntry.DurationSeconds.ToString() : "",
                     mapEntry != null ? mapEntry.StatusId.ToString() : "",
                     null
                 );
@@ -255,28 +257,37 @@ namespace _4RTools.Forms
         private void Grid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-            if (grid.Columns[e.ColumnIndex].Name != "Cooldown") return;
+
+            string columnName = grid.Columns[e.ColumnIndex].Name;
+            if (columnName != "Cooldown" && columnName != "Duration") return;
             if (!(grid.Rows[e.RowIndex].Tag is RTMSkillRef skill)) return;
 
             SkillMapEntry mapEntry = FindMapEntryFor(skill);
-            string text = Convert.ToString(grid.Rows[e.RowIndex].Cells["Cooldown"].Value ?? "").Trim();
+            string text = Convert.ToString(grid.Rows[e.RowIndex].Cells[columnName].Value ?? "").Trim();
 
             if (mapEntry == null)
             {
                 // Don't call RenderGrid() (Rows.Clear() + rebuild) from inside
                 // CellEndEdit - the grid is still mid-commit on this very cell, and
                 // tearing every row down under it crashes. Just revert this one cell.
-                grid.Rows[e.RowIndex].Cells["Cooldown"].Value = "";
+                grid.Rows[e.RowIndex].Cells[columnName].Value = "";
                 MessageBox.Show("This skill has no Buff ID linked yet - set a key and Test it first.", "Skill Bible", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (!int.TryParse(text, out int seconds))
             {
-                seconds = 0; // blank/invalid clears it rather than erroring - cooldown is optional
+                seconds = 0; // blank/invalid clears it rather than erroring - both fields are optional
             }
 
-            SkillMapManager.SetCooldown(mapEntry.StatusId, seconds);
+            if (columnName == "Cooldown")
+            {
+                SkillMapManager.SetCooldown(mapEntry.StatusId, seconds);
+            }
+            else
+            {
+                SkillMapManager.SetDuration(mapEntry.StatusId, seconds);
+            }
         }
 
         private void Grid_CellContentClick(object sender, DataGridViewCellEventArgs e)

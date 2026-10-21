@@ -1,0 +1,594 @@
+﻿[
+    {
+        "StatusId":  656,
+        "SkillId":  3025,
+        "SkillName":  "Darkside Shadow",
+        "Note":  "",
+        "CooldownSeconds":  150,
+        "DurationSeconds":  150
+    },
+    {
+        "StatusId":  90,
+        "SkillId":  280,
+        "SkillName":  "Burning Scythe",
+        "Note":  "",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  330
+    },
+    {
+        "StatusId":  197,
+        "SkillId":  1002,
+        "SkillName":  "Assassin Skills",
+        "Note":  "seeded: reuses vanilla CR_SHRINK",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  300
+    },
+    {
+        "StatusId":  31,
+        "SkillId":  157,
+        "SkillName":  "Assault Mode",
+        "Note":  "seeded: reuses vanilla MG_ENERGYCOAT",
+        "CooldownSeconds":  45,
+        "DurationSeconds":  60
+    },
+    {
+        "StatusId":  103,
+        "SkillId":  355,
+        "SkillName":  "Aurum Crucis",
+        "Note":  "seeded: reuses vanilla LK_AURABLADE",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  160
+    },
+    {
+        "StatusId":  65,
+        "SkillId":  279,
+        "SkillName":  "Auto Spell",
+        "Note":  "seeded: reuses vanilla SA_AUTOSPELL",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  390
+    },
+    {
+        "StatusId":  9,
+        "SkillId":  33,
+        "SkillName":  "Bishop\u0027s Guard",
+        "Note":  "seeded: reuses vanilla AL_ANGELUS",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  120
+    },
+    {
+        "StatusId":  21,
+        "SkillId":  75,
+        "SkillName":  "Black Metal",
+        "Note":  "seeded: reuses vanilla PR_GLORIA",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  60
+    },
+    {
+        "StatusId":  30,
+        "SkillId":  155,
+        "SkillName":  "Blast Juggler Soul",
+        "Note":  "seeded: reuses vanilla MC_LOUD",
+        "CooldownSeconds":  30,
+        "DurationSeconds":  300
+    },
+    {
+        "StatusId":  120,
+        "SkillId":  390,
+        "SkillName":  "Deflect Blades",
+        "Note":  "seeded: reuses vanilla ST_REJECTSWORD",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  300
+    },
+    {
+        "StatusId":  186,
+        "SkillId":  482,
+        "SkillName":  "Dual Cast",
+        "Note":  "seeded: reuses vanilla PF_DOUBLECASTING",
+        "CooldownSeconds":  20,
+        "DurationSeconds":  20
+    },
+    {
+        "StatusId":  114,
+        "SkillId":  378,
+        "SkillName":  "Enchant Deadly Poison",
+        "Note":  "seeded: reuses vanilla ASC_EDP",
+        "CooldownSeconds":  90,
+        "DurationSeconds":  240
+    },
+    {
+        "StatusId":  107,
+        "SkillId":  359,
+        "SkillName":  "Frenzy",
+        "Note":  "seeded: reuses vanilla LK_BERSERK",
+        "CooldownSeconds":  10,
+        "DurationSeconds":  120
+    },
+    {
+        "StatusId":  56,
+        "SkillId":  479,
+        "SkillName":  "Full Set Revest",
+        "Note":  "seeded: reuses vanilla CR_FULLPROTECTION",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  750
+    },
+    {
+        "StatusId":  208,
+        "SkillId":  543,
+        "SkillName":  "Harvest",
+        "Note":  "seeded: reuses vanilla NJ_NEN",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  50
+    },
+    {
+        "StatusId":  206,
+        "SkillId":  531,
+        "SkillName":  "Kawarimi",
+        "Note":  "seeded: reuses vanilla NJ_UTSUSEMI",
+        "CooldownSeconds":  25,
+        "DurationSeconds":  4
+    },
+    {
+        "StatusId":  407,
+        "SkillId":  2325,
+        "SkillName":  "Killer Instinct",
+        "Note":  "seeded: reuses vanilla LG_INSPIRATION",
+        "CooldownSeconds":  150,
+        "DurationSeconds":  150
+    },
+    {
+        "StatusId":  1316,
+        "SkillId":  2315,
+        "SkillName":  "King\u0027s Fortress",
+        "Note":  "seeded: reuses vanilla LG_SHIELDSPELL",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  120
+    },
+    {
+        "StatusId":  3,
+        "SkillId":  45,
+        "SkillName":  "Knight Ritual",
+        "Note":  "seeded: reuses vanilla AC_CONCENTRATION",
+        "CooldownSeconds":  15,
+        "DurationSeconds":  150
+    },
+    {
+        "StatusId":  26,
+        "SkillId":  114,
+        "SkillName":  "Loki\u0027s Veil",
+        "Note":  "seeded: reuses vanilla BS_MAXIMIZE",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  181,
+        "SkillId":  475,
+        "SkillName":  "Memorize",
+        "Note":  "seeded: reuses vanilla ST_PRESERVE",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  180
+    },
+    {
+        "StatusId":  402,
+        "SkillId":  2318,
+        "SkillName":  "Prestige",
+        "Note":  "seeded: reuses vanilla LG_PRESTIGE",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  147,
+        "SkillId":  459,
+        "SkillName":  "Quickening",
+        "Note":  "seeded: reuses vanilla BS_ADRENALINE2",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  50
+    },
+    {
+        "StatusId":  105,
+        "SkillId":  357,
+        "SkillName":  "Ready to Rip",
+        "Note":  "seeded: reuses vanilla LK_CONCENTRATION",
+        "CooldownSeconds":  120,
+        "DurationSeconds":  50
+    },
+    {
+        "StatusId":  59,
+        "SkillId":  252,
+        "SkillName":  "Reflect Shield",
+        "Note":  "seeded: reuses vanilla CR_REFLECTSHIELD",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  300
+    },
+    {
+        "StatusId":  127,
+        "SkillId":  403,
+        "SkillName":  "Reload Quiver",
+        "Note":  "seeded: reuses vanilla PF_MEMORIZE",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  188,
+        "SkillId":  486,
+        "SkillName":  "Rising Wings",
+        "Note":  "seeded: reuses vanilla WS_OVERTHRUSTMAX",
+        "CooldownSeconds":  120,
+        "DurationSeconds":  180
+    },
+    {
+        "StatusId":  62,
+        "SkillId":  257,
+        "SkillName":  "Rook\u0027s Wall",
+        "Note":  "seeded: reuses vanilla CR_DEFENDER",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  180
+    },
+    {
+        "StatusId":  132,
+        "SkillId":  146,
+        "SkillName":  "Specialization of Elements",
+        "Note":  "seeded: reuses vanilla SM_AUTOBERSERK",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  115,
+        "SkillId":  380,
+        "SkillName":  "True Sight",
+        "Note":  "seeded: reuses vanilla SN_SIGHT",
+        "CooldownSeconds":  80,
+        "DurationSeconds":  60
+    },
+    {
+        "StatusId":  7,
+        "SkillId":  139,
+        "SkillName":  "Venom Coat",
+        "Note":  "seeded: reuses vanilla AS_POISONREACT",
+        "CooldownSeconds":  70,
+        "DurationSeconds":  50
+    },
+    {
+        "StatusId":  25,
+        "SkillId":  113,
+        "SkillName":  "Warring State",
+        "Note":  "seeded: reuses vanilla BS_OVERTHRUST",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  150
+    },
+    {
+        "StatusId":  68,
+        "SkillId":  258,
+        "SkillName":  "Weapon Quicken",
+        "Note":  "seeded: reuses vanilla CR_SPEARQUICKEN",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  180
+    },
+    {
+        "StatusId":  116,
+        "SkillId":  383,
+        "SkillName":  "Wind Walk",
+        "Note":  "seeded: reuses vanilla SN_WINDWALK",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  400
+    },
+    {
+        "StatusId":  104,
+        "SkillId":  356,
+        "SkillName":  "Shadow Parry",
+        "Note":  "",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  120
+    },
+    {
+        "StatusId":  1054,
+        "SkillId":  2607,
+        "SkillName":  "Astral Weapon",
+        "Note":  "auto-linked: SP_SOULREAPER -\u003e EFST_SOULREAPER resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  30,
+        "DurationSeconds":  60
+    },
+    {
+        "StatusId":  1095,
+        "SkillId":  2039,
+        "SkillName":  "Black Heart",
+        "Note":  "auto-linked: AB_ANCILLA -\u003e EFST_ANCILLA resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  10,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  360,
+        "SkillId":  2247,
+        "SkillName":  "Camouflage",
+        "Note":  "auto-linked: RA_CAMOUFLAGE -\u003e EFST_CAMOUFLAGE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  15,
+        "DurationSeconds":  10
+    },
+    {
+        "StatusId":  119,
+        "SkillId":  389,
+        "SkillName":  "Chase Walk",
+        "Note":  "auto-linked: ST_CHASEWALK -\u003e EFST_CHASEWALK resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  10,
+        "DurationSeconds":  6
+    },
+    {
+        "StatusId":  119,
+        "SkillId":  389,
+        "SkillName":  "Chase Walk",
+        "Note":  "auto-linked: ST_CHASEWALK -\u003e EFST_CHASEWALK resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  10,
+        "DurationSeconds":  6
+    },
+    {
+        "StatusId":  5,
+        "SkillId":  135,
+        "SkillName":  "Cloaking",
+        "Note":  "auto-linked: AS_CLOAKING -\u003e EFST_CLOAKING resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  30,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  5,
+        "SkillId":  135,
+        "SkillName":  "Cloaking",
+        "Note":  "auto-linked: AS_CLOAKING -\u003e EFST_CLOAKING resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  30,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  333,
+        "SkillId":  2033,
+        "SkillName":  "Cloaking Exceed",
+        "Note":  "auto-linked: GC_CLOAKINGEXCEED -\u003e EFST_CLOAKINGEXCEED resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  14,
+        "SkillId":  71,
+        "SkillName":  "Defensive Mode",
+        "Note":  "auto-linked: PR_SLOWPOISON -\u003e EFST_SLOWPOISON resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  40
+    },
+    {
+        "StatusId":  341,
+        "SkillId":  2027,
+        "SkillName":  "Disease Coating",
+        "Note":  "auto-linked: GC_POISONINGWEAPON -\u003e EFST_POISONINGWEAPON resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  300
+    },
+    {
+        "StatusId":  413,
+        "SkillId":  2335,
+        "SkillName":  "Draco Wing",
+        "Note":  "auto-linked: SR_LIGHTNINGWALK -\u003e EFST_LIGHTNINGWALK resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  10,
+        "DurationSeconds":  10
+    },
+    {
+        "StatusId":  391,
+        "SkillId":  2313,
+        "SkillName":  "Duel Stance",
+        "Note":  "auto-linked: LG_FORCEOFVANGUARD -\u003e EFST_FORCEOFVANGUARD resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  300
+    },
+    {
+        "StatusId":  400,
+        "SkillId":  2316,
+        "SkillName":  "Final Arrow",
+        "Note":  "auto-linked: LG_EXEEDBREAK -\u003e EFST_EXEEDBREAK resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  30,
+        "DurationSeconds":  300
+    },
+    {
+        "StatusId":  110,
+        "SkillId":  361,
+        "SkillName":  "Gaebolg Ascension",
+        "Note":  "auto-linked: HP_ASSUMPTIO -\u003e EFST_ASSUMPTIO resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  95
+    },
+    {
+        "StatusId":  362,
+        "SkillId":  2263,
+        "SkillName":  "Gungnir Flight",
+        "Note":  "auto-linked: NC_HOVERING -\u003e EFST_HOVERING resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  40,
+        "DurationSeconds":  30
+    },
+    {
+        "StatusId":  316,
+        "SkillId":  2001,
+        "SkillName":  "Harness Magic",
+        "Note":  "auto-linked: RK_ENCHANTBLADE -\u003e EFST_ENCHANTBLADE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  2,
+        "DurationSeconds":  200
+    },
+    {
+        "StatusId":  2,
+        "SkillId":  60,
+        "SkillName":  "Harness Speed",
+        "Note":  "auto-linked: KN_TWOHANDQUICKEN -\u003e EFST_TWOHANDQUICKEN resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  2,
+        "DurationSeconds":  200
+    },
+    {
+        "StatusId":  4,
+        "SkillId":  51,
+        "SkillName":  "Hiding",
+        "Note":  "auto-linked: TF_HIDING -\u003e EFST_HIDING resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  1,
+        "DurationSeconds":  30
+    },
+    {
+        "StatusId":  352,
+        "SkillId":  2234,
+        "SkillName":  "Inquisition Resolve",
+        "Note":  "auto-linked: RA_FEARBREEZE -\u003e EFST_FEARBREEZE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  120,
+        "DurationSeconds":  150
+    },
+    {
+        "StatusId":  722,
+        "SkillId":  5002,
+        "SkillName":  "Last Inquisition",
+        "Note":  "auto-linked: RA_UNLIMIT -\u003e EFST_UNLIMIT resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  120,
+        "DurationSeconds":  30
+    },
+    {
+        "StatusId":  427,
+        "SkillId":  2348,
+        "SkillName":  "Life of Dragon",
+        "Note":  "auto-linked: SR_GENTLETOUCH_REVITALIZE -\u003e EFST_GENTLETOUCH_REVITALIZE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  90,
+        "DurationSeconds":  60
+    },
+    {
+        "StatusId":  410,
+        "SkillId":  2338,
+        "SkillName":  "Loki\u0027s Fury",
+        "Note":  "auto-linked: SR_RAISINGDRAGON -\u003e EFST_RAISINGDRAGON resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  180
+    },
+    {
+        "StatusId":  646,
+        "SkillId":  3011,
+        "SkillName":  "Lotus Pact",
+        "Note":  "auto-linked: KO_MEIKYOUSISUI -\u003e EFST_MEIKYOUSISUI resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  30,
+        "DurationSeconds":  10
+    },
+    {
+        "StatusId":  426,
+        "SkillId":  2347,
+        "SkillName":  "Macabre",
+        "Note":  "auto-linked: SR_GENTLETOUCH_CHANGE -\u003e EFST_GENTLETOUCH_CHANGE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  30,
+        "DurationSeconds":  30
+    },
+    {
+        "StatusId":  153,
+        "SkillId":  465,
+        "SkillName":  "Mirror Image",
+        "Note":  "auto-linked: SL_KAITE -\u003e EFST_KAITE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  3
+    },
+    {
+        "StatusId":  720,
+        "SkillId":  5014,
+        "SkillName":  "Morroc\u0027s Mark",
+        "Note":  "auto-linked: ALL_FULL_THROTTLE -\u003e EFST_FULL_THROTTLE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  3600,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  108,
+        "SkillId":  368,
+        "SkillName":  "Night Hunt",
+        "Note":  "auto-linked: PA_SACRIFICE -\u003e EFST_SACRIFICE resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  0
+    },
+    {
+        "StatusId":  63,
+        "SkillId":  276,
+        "SkillName":  "Pawn\u0027s Rod",
+        "Note":  "auto-linked: SA_MAGICROD -\u003e EFST_MAGICROD resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  10,
+        "DurationSeconds":  2
+    },
+    {
+        "StatusId":  156,
+        "SkillId":  462,
+        "SkillName":  "Phoenix",
+        "Note":  "auto-linked: SL_KAIZEL -\u003e EFST_KAIZEL resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  180,
+        "DurationSeconds":  1200
+    },
+    {
+        "StatusId":  157,
+        "SkillId":  463,
+        "SkillName":  "Regenerate",
+        "Note":  "auto-linked: SL_KAAHI -\u003e EFST_KAAHI resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  20,
+        "DurationSeconds":  10
+    },
+    {
+        "StatusId":  43,
+        "SkillId":  61,
+        "SkillName":  "Riposte",
+        "Note":  "auto-linked: KN_AUTOCOUNTER -\u003e EFST_AUTOCOUNTER resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  5,
+        "DurationSeconds":  1
+    },
+    {
+        "StatusId":  43,
+        "SkillId":  61,
+        "SkillName":  "Riposte",
+        "Note":  "auto-linked: KN_AUTOCOUNTER -\u003e EFST_AUTOCOUNTER resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  5,
+        "DurationSeconds":  1
+    },
+    {
+        "StatusId":  1053,
+        "SkillId":  401,
+        "SkillName":  "Royal Authority",
+        "Note":  "auto-linked: CH_SOULCOLLECT -\u003e EFST_SOULCOLLECT resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  7,
+        "DurationSeconds":  15
+    },
+    {
+        "StatusId":  425,
+        "SkillId":  2346,
+        "SkillName":  "Seal Extraction",
+        "Note":  "auto-linked: SR_GENTLETOUCH_ENERGYGAIN -\u003e EFST_GENTLETOUCH_ENERGYGAIN resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  1,
+        "DurationSeconds":  480
+    },
+    {
+        "StatusId":  350,
+        "SkillId":  2054,
+        "SkillName":  "Spectral Servants",
+        "Note":  "auto-linked: AB_DUPLELIGHT -\u003e EFST_DUPLELIGHT resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  120
+    },
+    {
+        "StatusId":  133,
+        "SkillId":  411,
+        "SkillName":  "Sprint",
+        "Note":  "auto-linked: TK_RUN -\u003e EFST_RUN resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  10,
+        "DurationSeconds":  5
+    },
+    {
+        "StatusId":  113,
+        "SkillId":  366,
+        "SkillName":  "Unlimited Power",
+        "Note":  "auto-linked: HW_MAGICPOWER -\u003e EFST_MAGICPOWER resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  60,
+        "DurationSeconds":  45
+    },
+    {
+        "StatusId":  1036,
+        "SkillId":  2590,
+        "SkillName":  "Way of the Blade",
+        "Note":  "auto-linked: SJ_LIGHTOFSUN -\u003e EFST_LIGHTOFSUN resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  20,
+        "DurationSeconds":  60
+    },
+    {
+        "StatusId":  337,
+        "SkillId":  2028,
+        "SkillName":  "Weapon Blocking",
+        "Note":  "auto-linked: GC_WEAPONBLOCKING -\u003e EFST_WEAPONBLOCKING resolved from server status.hpp + skill_db.yml, not yet confirmed in-game",
+        "CooldownSeconds":  0,
+        "DurationSeconds":  120
+    }
+]

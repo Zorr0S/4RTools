@@ -25,6 +25,17 @@ namespace _4RTools.Model
         // Sight: 80s cooldown, shorter duration), which otherwise makes AutoBuff
         // spam the key uselessly for the gap between expiry and availability.
         public int CooldownSeconds { get; set; }
+
+        // Optional. How long the buff itself lasts once cast. Combined with
+        // CooldownSeconds this gives the "unavailable window" (Cooldown - Duration):
+        // the gap after the buff naturally expires where it genuinely can't be
+        // recast yet. AutoBuff uses this as a starting retry interval instead of
+        // blindly trusting the original cast time for the whole CooldownSeconds -
+        // if the buff disappears early (e.g. death clears it mid-duration), the
+        // original cast-time countdown is now wrong, so AutoBuff probes on a
+        // backoff schedule (starting at this gap, halving each miss down to 3s)
+        // rather than waiting out a timer that no longer reflects reality.
+        public int DurationSeconds { get; set; }
     }
 
     // Persists next to the executable, same convention as supported_servers.json
@@ -33,6 +44,13 @@ namespace _4RTools.Model
     public static class SkillMapManager
     {
         private static readonly string FileName = "SkillMap.json";
+
+        // Bundled starter map (built from this server's own skill_db.yml plus prior
+        // Skill Capture sessions - see docs/specs/skill-capture.md) so a fresh
+        // install doesn't start from zero. Shipped as Content under Resources/, same
+        // convention as Resources/RTMSkills.
+        private static readonly string SeedFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "SkillMap.seed.json");
+
         private static Dictionary<uint, SkillMapEntry> entries;
 
         static SkillMapManager()
@@ -74,6 +92,16 @@ namespace _4RTools.Model
             }
         }
 
+        public static void SetDuration(uint statusId, int durationSeconds)
+        {
+            if (entries.TryGetValue(statusId, out SkillMapEntry entry))
+            {
+                entry.DurationSeconds = durationSeconds;
+                Save();
+                Changed?.Invoke();
+            }
+        }
+
         public static void Remove(uint statusId)
         {
             if (entries.Remove(statusId))
@@ -86,6 +114,25 @@ namespace _4RTools.Model
         public static void Load()
         {
             entries = new Dictionary<uint, SkillMapEntry>();
+
+            // Fresh install: copy the bundled starter map in as the real file, so it
+            // becomes the user's own editable copy from here on. Never touches an
+            // existing file, even an empty one someone cleared on purpose.
+            if (!File.Exists(FileName))
+            {
+                try
+                {
+                    if (File.Exists(SeedFilePath))
+                    {
+                        File.Copy(SeedFilePath, FileName);
+                    }
+                }
+                catch
+                {
+                    // Couldn't seed (read-only folder, missing bundle, ...) - start empty.
+                }
+            }
+
             if (!File.Exists(FileName)) return;
 
             try
