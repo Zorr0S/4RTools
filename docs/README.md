@@ -31,7 +31,7 @@ Macros, ATK x DEF equipment switching and more).
 | Language | C# (VS 2022 project format, non-SDK `4RTools.csproj`) |
 | Platform | Windows only, requires **administrator** privileges (see `app.manifest`) |
 | Entry point | `Program.cs` → `Forms.AutoPatcher` → `Forms.ClientUpdaterForm` → `Forms.Container` |
-| Current version | `v2.10.0` (`Utils/AppConfig.cs`) |
+| Current version | `v2.11.0` (`Utils/AppConfig.cs`) |
 | Key libraries | Newtonsoft.Json 13.0.1, Aspose.Zip 22.10.0 (RAR extraction), Costura.Fody (assembly embedding) |
 | Persistence | JSON profile files under `Profile\` and `supported_servers.json` next to the executable |
 

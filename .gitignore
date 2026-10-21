@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Local-only notes - kept on disk for personal reference, never committed/shared
+docs/releasing.md
