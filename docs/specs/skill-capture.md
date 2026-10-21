@@ -8,6 +8,7 @@
 | Tab | `tabStatusCapture` (`Forms/Container.cs#SetStatusCaptureWindow`) |
 | Profile key | `StatusCapture` (see [Profiles](../profiles.md)) |
 | Persistence | `SkillMap.json`, `CapturedStatusLog.json` — both next to the executable, independent of any single profile |
+| Seed data | `Resources/SkillMap.seed.json` (bundled `Content`) — copied in as `SkillMap.json` on a fresh install only; never touches an existing file |
 
 ## 1. Purpose
 
@@ -77,11 +78,16 @@ One row per distinct status id ever observed, regardless of whether it is mapped
 
 ### `SkillMapEntry` (`SkillMap.json`, via `SkillMapManager`)
 ```
-{ StatusId: uint, SkillId: int, SkillName: string, Note: string, CooldownSeconds: int }
+{ StatusId: uint, SkillId: int, SkillName: string, Note: string, CooldownSeconds: int, DurationSeconds: int }
 ```
 `StatusId` is the dictionary key (one entry per status id). `CooldownSeconds` (0 =
 unset) is read by `Autobuff.cs` to suppress re-pressing a key before the skill's real
 cooldown has elapsed, even if the buff's duration is shorter than its cooldown.
+`DurationSeconds` (0 = unset, optional) is how long the buff itself lasts once cast;
+combined with `CooldownSeconds` it gives the "unavailable window"
+(`CooldownSeconds - DurationSeconds`) — see
+[Autobuff's backoff retry](#9-autobuff-integration-backoff-retry-when-duration-is-set)
+below for why this exists.
 
 ### `SkillTrigger` (persisted on the profile, `StatusCapture.triggers`)
 ```
@@ -206,3 +212,23 @@ that status id is preserved across re-saves (see `SkillMapManager.SetSkill`).
 - No icon support for mapped skills from this tab alone — `Model/Buff.cs`'s hardcoded
   catalog and `RTMSkillReference`/`CustomSkillIcons` (used by Skill Bible) are the only
   icon sources.
+
+## 9. Autobuff integration: backoff retry when Duration is set
+
+`Autobuff.cs`'s simple model — don't retry a key until `CooldownSeconds` have passed
+since it was last pressed — assumes the buff always runs its full natural duration
+before expiring. That assumption breaks if the buff gets cleared early (character
+death, a debuff, a zone change): the stored timestamp is now stale, so Autobuff would
+otherwise sit waiting out a window that no longer reflects reality.
+
+When `DurationSeconds` is also set (optional; edited in Skill Bible's "Buff Duration
+(s)" column, see [Skill Bible spec §5](skill-bible.md#5-behavior)), Autobuff instead
+computes the "unavailable window" (`CooldownSeconds - DurationSeconds`) and, once that
+gap has passed since the last press, starts probing: press, and if the buff is still
+missing next time, halve the wait before the next attempt (floor 3 seconds), repeating
+until the buff reappears (which resets the backoff for next time). This converges to
+retrying every ~3s well before the nominal cooldown target, so an early loss is caught
+quickly instead of waiting out the original estimate - and it never waits *longer* than
+the old fixed-window approach, since the first probe point is always at or before
+`CooldownSeconds` has elapsed. Skills with no `DurationSeconds` configured keep the
+original fixed-window behavior unchanged.

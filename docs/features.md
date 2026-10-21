@@ -171,7 +171,11 @@ starts/stops the action on `TURN_ON`/`TURN_OFF` (see
   cross-references captured ids against this map; editing the "Skill ID"/"Skill
   Name"/"Note" cells writes straight to it. The map can be exported to share with other
   players of the same server, or imported from a file someone else built (with a prompt on
-  import to overwrite or keep locally-assigned values on a conflicting status id).
+  import to overwrite or keep locally-assigned values on a conflicting status id). A fresh
+  install starts pre-seeded from a bundled `Resources/SkillMap.seed.json` (built from this
+  server's own `skill_db.yml` once source access was obtained, plus prior Skill Capture
+  sessions) instead of empty - this only ever applies when no local `SkillMap.json` exists
+  yet, never overwriting one a user already has.
 - **Auto-mapping via Skill Triggers:** instead of only labeling ids after the fact, the
   user can register a `SkillTrigger` (skill id + skill name + hotkey, same key-capture UX
   as Autobuff/Debuff Recovery) for a skill they know is a buff. `StatusCapture`'s loop

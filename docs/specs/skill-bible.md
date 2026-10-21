@@ -41,6 +41,9 @@ without leaving the tab or typing an id by hand.
      bar, not edited in-grid)
    - **Cooldown (s)** (editable `TextBox` cell — only meaningful once a Buff ID exists;
      see §5)
+   - **Buff Duration (s)** (editable `TextBox` cell, optional — same edit rules as
+     Cooldown; combined with it, Autobuff derives the "unavailable window" used for its
+     backoff retry, see [Skill Capture spec §9](skill-capture.md#9-autobuff-integration-backoff-retry-when-duration-is-set))
    - **Buff ID** (read-only — the `SkillMapEntry.StatusId` once a link exists, blank
      otherwise)
    - **Test** (`DataGridViewButtonColumn`) — sends the bound key via the Skill Capture
@@ -58,7 +61,7 @@ owned elsewhere:
 | --- | --- |
 | Icon, Class, Skill Name, Type, Aimed At | `RTMSkillReference.All` (read-only, bundled scrape) |
 | Key | `ProfileSingleton.GetCurrent().StatusCapture.triggers` (`SkillTrigger`, matched by `SkillId` if non-zero, else by name) |
-| Cooldown (s), Buff ID | `SkillMapManager.Entries` (`SkillMapEntry`, matched the same way) |
+| Cooldown (s), Buff Duration (s), Buff ID | `SkillMapManager.Entries` (`SkillMapEntry`, matched the same way) |
 
 See [Skill Capture spec §4](skill-capture.md#4-data-model) for the full shape of
 `SkillTrigger`/`SkillMapEntry`.
@@ -106,16 +109,17 @@ that skill (prompts to Set Key first if none) and an attached client, then calls
 to the game, diffs the status buffer over a 3-second window, and on exactly one new status
 id, writes a `SkillMapEntry` (which is what then populates this row's Buff ID column).
 
-### 5.3 Cooldown editing
-`Grid_CellEndEdit` only acts on the Cooldown column. If the skill has no `SkillMapEntry`
-yet (no Buff ID — i.e. never tested/mapped), the edit is reverted and a `MessageBox`
-explains a key must be set and tested first; this cannot be reordered to "allow setting
-cooldown before a link exists" without also changing `SkillMapManager.SetCooldown`, which
-is a no-op if the entry doesn't exist yet. A blank/non-numeric value clears the cooldown
-(`0`) rather than erroring, since cooldown is optional. **Must not** call `RenderGrid()`
-(which does `Rows.Clear()`) synchronously from inside this handler — doing so was an
-actual, previously-hit crash (reentrant grid teardown mid-cell-commit); the fix was to
-revert only the one cell directly.
+### 5.3 Cooldown / Buff Duration editing
+`Grid_CellEndEdit` acts on either the Cooldown or the Buff Duration column (same handler,
+branching on which column fired - both share identical validation). If the skill has no
+`SkillMapEntry` yet (no Buff ID — i.e. never tested/mapped), the edit is reverted and a
+`MessageBox` explains a key must be set and tested first; this cannot be reordered to
+"allow setting cooldown/duration before a link exists" without also changing
+`SkillMapManager.SetCooldown`/`SetDuration`, which are no-ops if the entry doesn't exist
+yet. A blank/non-numeric value clears the field (`0`) rather than erroring, since both are
+optional. **Must not** call `RenderGrid()` (which does `Rows.Clear()`) synchronously from
+inside this handler — doing so was an actual, previously-hit crash (reentrant grid
+teardown mid-cell-commit); the fix was to revert only the one cell directly.
 
 ### 5.4 Icon override
 **Assign Icon...** opens an `OpenFileDialog` (png/jpg/jpeg/bmp/gif) and calls
